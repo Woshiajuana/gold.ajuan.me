@@ -79,7 +79,7 @@ module.exports = class HandleController extends Controller {
      * @apiSampleRequest /*
      */
     async info () {
-        const { ctx } = this;
+        const { ctx, app } = this;
         let {
             w,
             h,
@@ -92,7 +92,7 @@ module.exports = class HandleController extends Controller {
         let pathname = decodeURIComponent(url.parse(ctx.request.url).pathname);
         let ext = path.extname(pathname).substring(1);
         let type = ext === 'png' ? 'png' : 'jpeg';
-        let filepath = path.join(__dirname, '../../oss/', pathname);
+        let filepath = path.join(app.config.ossBasePath, pathname);
         ctx.set('content-type', `image/${type}`);
         if (q >= 100) {
             return ctx.body = fs.createReadStream(filepath);
