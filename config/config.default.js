@@ -8,13 +8,11 @@ module.exports = appInfo => {
 
     const config = exports = {};
 
-    config.publicUrl = 'http://127.0.0.1:9005/';
-
     // 端口
     config.cluster = {
         listen: {
             path: '',
-            port: 9005,
+            port: 9999,
             hostname: '0.0.0.0',
         }
     };

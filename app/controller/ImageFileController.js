@@ -62,7 +62,6 @@ module.exports = class HandleController extends Controller {
             filename,
             name,
             filepath: path.join(output, filename),
-            baseUrl: app.config.publicUrl,
             type: path.extname(filename).substring(1),
         });
     }
