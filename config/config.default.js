@@ -8,6 +8,8 @@ module.exports = appInfo => {
 
     const config = exports = {};
 
+    config.ossBasePath = path.join(__dirname, '../oss/') ;
+
     // 端口
     config.cluster = {
         listen: {

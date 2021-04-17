@@ -52,7 +52,7 @@ module.exports = class HandleController extends Controller {
         // 存储图片
         await service.imageFileService.readWriteFile(
             filepath,
-            path.join(__dirname, '../../oss/', output),
+            path.join(app.config.ossBasePath, output),
             filename
         );
         // 图片信息
