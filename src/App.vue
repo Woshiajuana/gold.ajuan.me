@@ -1,85 +1,112 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <RouterView v-slot="{ Component }">
+    <Transition :name="transitionName">
+      <KeepAlive max="10" :include="includes">
+        <Component
+          class="view-wrap"
+          :class="{ 'hide-header': isNoHeader }"
+          :is="Component"
+          :key="componentKey"
+          @reset="handleReset"
+        />
+      </KeepAlive>
+    </Transition>
+  </RouterView>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
+<script setup lang="ts">
+  import { useKeepAlive, useTransitionName } from '@daysnap/vue-use'
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+  const { includes, keepAliveList } = useKeepAlive(310)
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
+  const route = useRoute()
+  const componentKey = computed(() => {
+    if (route.path.includes(':')) {
+      return route.fullPath
+    }
+    return
+  })
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+  const handleReset = () => {
+    includes.value = []
+    keepAliveList.value = []
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+  const transitionName = useTransitionName({
+    enterClass: 'slide-plus-left',
+    leaveClass: 'slide-plus-right',
+  })
+</script>
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+<style lang="scss">
+  @use '@/assets/scss/global.scss' as *;
 
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
+  .view-wrap {
+    @extend %pa;
+    @extend %t0;
+    @extend %l0;
+    @extend %w100;
+    @extend %h100;
+    @extend %bsb;
+    @extend %oya;
+    background-color: $bg-color;
+    &.is-white {
+      background-color: #fff;
+    }
+    &.is-fullscreen {
+      @extend %oh;
+    }
+    &.is-pt {
+      padding-top: j(10);
+    }
+    &.is-pb {
+      padding-bottom: j(120);
+    }
+    &.hide-header {
+      .hor-header {
+        @extend %dn;
+      }
+    }
+    &.is-nav-white {
+      --van-nav-bar-icon-color: #fff;
+      --van-nav-bar-title-text-color: #fff;
+    }
+    &.is-nav-transparent {
+      .van-nav-bar {
+        @extend %dan;
+        background-color: transparent;
+      }
+    }
+    &.is-no-border {
+      .van-nav-bar {
+        @extend %dan;
+      }
+    }
+    &.is-search-navbar {
+      .van-nav-bar__title {
+        max-width: 281px;
+        width: 281px;
+      }
+    }
+    &.is-search-full-navbar {
+      .van-nav-bar__title {
+        font-weight: normal;
+        max-width: 100%;
+        width: 100%;
+        .van-search {
+          padding: 0 0 0 12px;
+        }
+        .van-search__action {
+          padding: 0 14px;
+        }
+      }
+      .van-nav-bar__left,
+      .van-nav-bar__right {
+        display: none;
+      }
+    }
   }
-}
+  .c-bar {
+    height: j(10);
+  }
 </style>
