@@ -1,13 +1,13 @@
 import { fileURLToPath, URL } from 'node:url'
 
-import { defineConfig } from 'vite'
+import { VantResolver } from '@vant/auto-import-resolver'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import versionFile from 'vite-plugin-version-file'
+import postCssPxToRem from 'postcss-pxtorem'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import postCssPxToRem from 'postcss-pxtorem'
-import { VantResolver } from '@vant/auto-import-resolver'
+import { defineConfig } from 'vite'
+import versionFile from 'vite-plugin-version-file'
 
 // https://vite.dev/config/
 export default defineConfig({

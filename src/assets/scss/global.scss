@@ -1,6 +1,6 @@
-@use '@daysnap/define-sass/reset.scss' as *;
-@use '@daysnap/define-sass/slide-plus.scss' as *;
-@use '@daysnap/define-sass/popup.scss';
+@use '@daysnap/define-sass/src/reset.scss' as *;
+@use '@daysnap/define-sass/src/slide-plus.scss' as *;
+@use '@daysnap/define-sass/src/popup.scss';
 
 @use 'var.scss' as *;
 @use 'common.scss' as *;

@@ -2,13 +2,7 @@
   <RouterView v-slot="{ Component }">
     <Transition :name="transitionName">
       <KeepAlive max="10" :include="includes">
-        <Component
-          class="view-wrap"
-          :class="{ 'hide-header': isNoHeader }"
-          :is="Component"
-          :key="componentKey"
-          @reset="handleReset"
-        />
+        <Component class="view-wrap" :is="Component" :key="componentKey" @reset="handleReset" />
       </KeepAlive>
     </Transition>
   </RouterView>
@@ -61,11 +55,6 @@
     }
     &.is-pb {
       padding-bottom: j(120);
-    }
-    &.hide-header {
-      .hor-header {
-        @extend %dn;
-      }
     }
     &.is-nav-white {
       --van-nav-bar-icon-color: #fff;
