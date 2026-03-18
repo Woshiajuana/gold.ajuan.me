@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <p></p>
+  <div class="number-input">
+    <h1>{{ $route.meta.title }}</h1>
   </div>
 </template>
 

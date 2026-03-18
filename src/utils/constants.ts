@@ -2,4 +2,4 @@
 export const __DEV__ = process.env.NODE_ENV === 'development'
 
 // 项目名称
-export const NAME = 'h5-autostreets'
+export const NAME = 'gold.ajuan.me'

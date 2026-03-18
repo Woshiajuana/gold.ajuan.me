@@ -1,5 +1,4 @@
 import { formatMessage } from '@daysnap/utils'
-import { closeToast, showToast } from 'vant'
 
 import { __DEV__ } from './constants'
 import { excludeMessage } from './excludeMessage'

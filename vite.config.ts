@@ -5,6 +5,7 @@ import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import postCssPxToRem from 'postcss-pxtorem'
 import AutoImport from 'unplugin-auto-import/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import { defineConfig } from 'vite'
 import versionFile from 'vite-plugin-version-file'
@@ -23,7 +24,7 @@ export default defineConfig({
     AutoImport({
       imports: ['vue', 'vue-router'],
       dts: 'typings/auto-imports.d.ts',
-      resolvers: [VantResolver()],
+      resolvers: [VantResolver(), ElementPlusResolver()],
     }),
 
     // https://github.com/antfu/unplugin-vue-components
@@ -31,7 +32,7 @@ export default defineConfig({
       dts: 'typings/components.d.ts',
       extensions: ['ts', 'jsx', 'tsx', 'js', 'vue'],
       directoryAsNamespace: true,
-      resolvers: [VantResolver()],
+      resolvers: [VantResolver(), ElementPlusResolver()],
     }),
   ],
   resolve: {

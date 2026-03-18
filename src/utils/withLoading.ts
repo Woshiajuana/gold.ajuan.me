@@ -1,5 +1,5 @@
 import { createWithLoading, isBoolean } from '@daysnap/utils'
-import { showLoadingToast, type ToastOptions } from 'vant'
+import { type ToastOptions } from 'vant'
 
 export type WithLoadingOptions = boolean | string | ToastOptions
 
