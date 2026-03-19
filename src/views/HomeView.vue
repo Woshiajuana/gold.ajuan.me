@@ -1,7 +1,7 @@
 <template>
   <div class="home-wrap">
     <header class="header-section">
-      <img src="@/assets/images/logo.png" alt="logo" />
+      <img src="@/assets/images/logo.webp" alt="logo" />
       <h1>黄金成本价计算器</h1>
     </header>
 
@@ -322,6 +322,7 @@
     display: flex;
     flex-direction: column;
     text-align: center;
+    align-items: center;
     gap: 10px;
   }
 
