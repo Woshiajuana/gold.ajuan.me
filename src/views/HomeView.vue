@@ -53,7 +53,9 @@
     </section>
 
     <section class="action-bar">
-      <VanButton class="save-btn" type="primary" block @click="handleSave">保存当前参数</VanButton>
+      <VanButton class="save-btn" type="primary" block :loading="loading" @click="handleSave">
+        保存当前参数
+      </VanButton>
       <VanButton class="reset-btn" @click="handleReset">重置</VanButton>
       <div class="save-time" v-if="savedAtText">上次保存：{{ savedAtText }}</div>
     </section>
@@ -66,6 +68,11 @@
 </template>
 
 <script setup lang="ts">
+  import { sleep } from '@daysnap/utils'
+  import { useAsyncTask } from '@daysnap/vue-use'
+
+  import { sounds } from '@/utils'
+
   import NumberInput from './components/NumberInput.vue'
 
   const form = reactive({
@@ -124,16 +131,23 @@
     return `${yyyy}-${MM}-${dd} ${hh}:${mm}`
   }
 
-  const handleSave = () => {
+  const { trigger: handleSave, loading } = useAsyncTask(async () => {
+    sounds.click()
+    await sleep(500)
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(form))
       const time = `${Date.now()}`
       localStorage.setItem(STORAGE_TIME_KEY, time)
       savedAtText.value = formatSaveTime(time)
-    } catch {}
-  }
+      sounds.success()
+      showSuccessToast(`保存成功`)
+    } catch {
+      sounds.error()
+    }
+  })
 
   const handleReset = () => {
+    sounds.click()
     form.price = 0
     form.buyWeight = 0
     form.currentAvgPrice = 0
@@ -162,6 +176,9 @@
   @use '@/assets/scss/define.scss' as *;
 
   .home-wrap {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
     min-height: 100%;
     padding: 12px 12px 16px;
     background: linear-gradient(180deg, #fff8dc 0%, #f8fbff 180px, transparent 180px);
@@ -169,7 +186,6 @@
 
   .header-section {
     text-align: center;
-    margin-bottom: 10px;
     img {
       width: 48px;
       height: 48px;
@@ -186,7 +202,6 @@
   }
 
   .panel {
-    margin-top: 8px;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
@@ -216,7 +231,6 @@
   }
 
   .result-card {
-    margin-top: 6px;
     padding: 12px 12px;
     background: linear-gradient(135deg, #fff3cd, #fff9eb 45%, #ffffff 100%);
     border-radius: 12px;
@@ -286,7 +300,6 @@
   }
 
   .action-bar {
-    margin-top: 8px;
     text-align: center;
   }
 
@@ -298,10 +311,11 @@
   }
 
   .reset-btn {
-    margin-top: 4px;
+    margin-top: 10px;
     height: auto;
     border: none;
     background: transparent;
+    text-decoration: underline;
     padding: 0;
     color: #9ca3af;
     font-size: 12px;
@@ -309,14 +323,14 @@
   }
 
   .save-time {
-    margin-top: 6px;
+    margin-top: 10px;
     text-align: center;
     font-size: 11px;
     color: #9ca3af;
   }
 
   .footer-info {
-    margin-top: 10px;
+    margin-top: auto;
     text-align: center;
   }
 
