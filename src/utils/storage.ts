@@ -3,9 +3,9 @@ import { Storage } from '@daysnap/utils'
 import { createNamespace } from './createNamespace'
 
 export const costPriceStorage = new Storage<{
-  price: 0
-  buyWeight: 0
-  currentAvgPrice: 0
-  currentWeight: 0
-  saveTime: string
+  price: number
+  buyWeight: number
+  currentAvgPrice: number
+  currentWeight: number
+  savedAtTime: string
 }>(createNamespace('cost-price'), window.localStorage)

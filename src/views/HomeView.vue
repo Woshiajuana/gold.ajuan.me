@@ -76,7 +76,7 @@
         保存当前参数
       </VanButton>
       <VanButton class="reset-btn" @click="handleReset">重置</VanButton>
-      <p class="save-time" v-if="savedAtText">上次保存：{{ savedAtText }}</p>
+      <p class="save-time" v-if="form.savedAtTime">上次保存：{{ form.savedAtTime }}</p>
     </section>
 
     <footer class="footer-info">
@@ -87,7 +87,7 @@
 </template>
 
 <script setup lang="ts">
-  import { sleep } from '@daysnap/utils'
+  import { formatDate, sleep } from '@daysnap/utils'
   import { useAsyncTask } from '@daysnap/vue-use'
   import confetti from 'canvas-confetti'
 
@@ -95,15 +95,15 @@
 
   import NumberInput from './components/NumberInput.vue'
 
-  const form = reactive({
-    price: 0,
-    buyWeight: 0,
-    currentAvgPrice: 0,
-    currentWeight: 0,
-  })
-  const STORAGE_KEY = 'gold-calculator-form-v1'
-  const STORAGE_TIME_KEY = 'gold-calculator-form-time-v1'
-  const savedAtText = ref('')
+  const form = ref(
+    costPriceStorage.getItem({
+      price: 0,
+      buyWeight: 0,
+      currentAvgPrice: 0,
+      currentWeight: 0,
+      savedAtTime: '',
+    }),
+  )
 
   const copyright = `© ${new Date().getFullYear()} ${location.hostname}`
 
@@ -113,11 +113,12 @@
   }
 
   const result = computed(() => {
-    const totalWeight = form.currentWeight + form.buyWeight
-    const buyCost = form.price * form.buyWeight
-    const totalCost = form.currentAvgPrice * form.currentWeight + buyCost
+    const { currentWeight, price, buyWeight, currentAvgPrice } = form.value
+    const totalWeight = currentWeight + buyWeight
+    const buyCost = price * buyWeight
+    const totalCost = currentAvgPrice * currentWeight + buyCost
     const nextAvgPrice = totalWeight === 0 ? 0 : totalCost / totalWeight
-    const delta = nextAvgPrice - form.currentAvgPrice
+    const delta = nextAvgPrice - currentAvgPrice
 
     return {
       buyCost: round(buyCost),
@@ -138,66 +139,31 @@
     return `${prefix}${value.toFixed(2)} 元/克`
   }
 
-  const formatSaveTime = (value: string) => {
-    const time = Number(value)
-    if (!Number.isFinite(time) || time <= 0) {
-      return ''
-    }
-    const date = new Date(time)
-    const yyyy = date.getFullYear()
-    const MM = `${date.getMonth() + 1}`.padStart(2, '0')
-    const dd = `${date.getDate()}`.padStart(2, '0')
-    const hh = `${date.getHours()}`.padStart(2, '0')
-    const mm = `${date.getMinutes()}`.padStart(2, '0')
-    return `${yyyy}-${MM}-${dd} ${hh}:${mm}`
-  }
-
   const { trigger: handleSave, loading } = useAsyncTask(async () => {
     sounds.click()
     await sleep(500)
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(form))
-      const time = `${Date.now()}`
-      localStorage.setItem(STORAGE_TIME_KEY, time)
-      savedAtText.value = formatSaveTime(time)
-      sounds.success()
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 },
-      })
-      showSuccessToast(`保存成功`)
-    } catch {
-      sounds.error()
-    }
+    form.value.savedAtTime = formatDate('yyyy-MM-dd hh:mm')
+    costPriceStorage.setItem(form.value)
+    sounds.success()
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+    })
+    showSuccessToast(`保存成功`)
   })
 
   const handleReset = async () => {
     sounds.pop()
     await showConfirmDialog({ message: '确认重置吗？' }).finally(() => sounds.click())
-    form.price = 0
-    form.buyWeight = 0
-    form.currentAvgPrice = 0
-    form.currentWeight = 0
+    Object.assign(form.value, {
+      price: 0,
+      buyWeight: 0,
+      currentAvgPrice: 0,
+      currentWeight: 0,
+    })
     showSuccessToast(`重置成功`)
   }
-
-  onMounted(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      if (raw) {
-        const parsed = JSON.parse(raw)
-        if (typeof parsed?.price === 'number') form.price = parsed.price
-        if (typeof parsed?.buyWeight === 'number') form.buyWeight = parsed.buyWeight
-        if (typeof parsed?.currentAvgPrice === 'number')
-          form.currentAvgPrice = parsed.currentAvgPrice
-        if (typeof parsed?.currentWeight === 'number') form.currentWeight = parsed.currentWeight
-      }
-
-      const savedTime = localStorage.getItem(STORAGE_TIME_KEY) ?? ''
-      savedAtText.value = formatSaveTime(savedTime)
-    } catch {}
-  })
 </script>
 
 <style lang="scss" scoped>
