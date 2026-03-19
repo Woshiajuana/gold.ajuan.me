@@ -35,13 +35,7 @@
 
       <div class="field-item">
         <div class="field-label">准备加仓</div>
-        <NumberInput
-          v-model="form.buyWeight"
-          :min="0"
-          :step="0.1"
-          :precision="2"
-          :max="999999999"
-        />
+        <NumberInput v-model="form.buyWeight" :min="0" :step="1" :precision="2" :max="999999999" />
         <div class="field-unit">克</div>
       </div>
 
@@ -62,7 +56,7 @@
         <NumberInput
           v-model="form.currentWeight"
           :min="0"
-          :step="0.1"
+          :step="1"
           :precision="2"
           :max="999999999"
         />
