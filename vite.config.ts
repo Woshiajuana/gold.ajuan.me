@@ -7,6 +7,7 @@ import postCssPxToRem from 'postcss-pxtorem'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { defineConfig } from 'vite'
+import viteCompression from 'vite-plugin-compression'
 import versionFile from 'vite-plugin-version-file'
 
 // https://vite.dev/config/
@@ -14,7 +15,11 @@ export default defineConfig({
   base: process.env.__BASE__ || '/',
   plugins: [
     vue(),
+
     vueJsx(),
+
+    viteCompression(),
+
     versionFile({
       source: JSON.stringify({ status: 0, data: Date.now() }),
     }),
