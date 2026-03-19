@@ -1,3 +1,5 @@
+import { vibrate } from './vibrate'
+
 let audioContext: AudioContext | null = null
 
 function getAudioContext(): AudioContext {
@@ -12,6 +14,7 @@ function getAudioContext(): AudioContext {
 
 export const sounds = {
   click: () => {
+    vibrate()
     try {
       const ctx = getAudioContext()
       const t = ctx.currentTime
