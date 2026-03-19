@@ -170,17 +170,17 @@
   .number-input {
     display: flex;
     align-items: center;
-    padding: 4px;
+    padding: 3px;
     border: 1px solid #dbe4ee;
     border-radius: 999px;
     background-color: #f7fafc;
-    gap: 6px;
+    gap: 4px;
   }
 
   .number-input-btn {
-    width: 34px;
-    min-width: 34px;
-    height: 34px;
+    width: 30px;
+    padding: 0;
+    height: 30px;
     border: 1px solid #dbe4ee;
     border-radius: 50%;
     background-color: #fff;
@@ -202,23 +202,24 @@
   }
 
   .number-input-btn :deep(.van-icon) {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
   }
 
   .number-input-input {
     flex: 1;
     min-width: 0;
-    height: 34px;
-    padding: 0 8px;
+    height: 30px;
+    padding: 0 6px;
     border: none;
     border-radius: 999px;
     background-color: transparent;
     color: #1d2129;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
-    line-height: 34px;
+    line-height: 30px;
     text-align: center;
+    font-variant-numeric: tabular-nums;
     outline: none;
   }
 
