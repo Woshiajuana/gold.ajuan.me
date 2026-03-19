@@ -76,7 +76,10 @@
         保存当前参数
       </VanButton>
       <VanButton class="reset-btn" @click="handleReset">重置</VanButton>
-      <p class="save-time" v-if="form.savedAtTime">上次保存：{{ form.savedAtTime }}</p>
+    </section>
+
+    <section class="qrcode-section">
+      <img src="@/assets/images/qrcode.png" alt="qrcode" />
     </section>
 
     <footer class="footer-info">
@@ -101,7 +104,6 @@
       buyWeight: 0,
       currentAvgPrice: 0,
       currentWeight: 0,
-      savedAtTime: '',
     }),
   )
 
@@ -142,7 +144,6 @@
   const { trigger: handleSave, loading } = useAsyncTask(async () => {
     sounds.click()
     await sleep(500)
-    form.value.savedAtTime = formatDate(new Date(), 'yyyy-MM-dd hh:mm')
     costPriceStorage.setItem(form.value)
     sounds.success()
     confetti({
@@ -319,16 +320,21 @@
     font-weight: 400;
   }
 
-  .save-time {
+  .local-tip {
     text-align: center;
     font-size: 11px;
     color: #9ca3af;
   }
 
-  .local-tip {
-    text-align: center;
-    font-size: 11px;
-    color: #9ca3af;
+  .qrcode-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    img {
+      width: 100px;
+      height: 100px;
+    }
   }
 
   .footer-info {

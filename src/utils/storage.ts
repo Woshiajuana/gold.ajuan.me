@@ -7,5 +7,4 @@ export const costPriceStorage = new Storage<{
   buyWeight: number
   currentAvgPrice: number
   currentWeight: number
-  savedAtTime: string
 }>(createNamespace('cost-price'), window.localStorage)
