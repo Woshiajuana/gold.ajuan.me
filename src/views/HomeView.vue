@@ -142,7 +142,7 @@
   const { trigger: handleSave, loading } = useAsyncTask(async () => {
     sounds.click()
     await sleep(500)
-    form.value.savedAtTime = formatDate('yyyy-MM-dd hh:mm')
+    form.value.savedAtTime = formatDate(new Date(), 'yyyy-MM-dd hh:mm')
     costPriceStorage.setItem(form.value)
     sounds.success()
     confetti({
