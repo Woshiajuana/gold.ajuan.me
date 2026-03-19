@@ -80,7 +80,7 @@
     </section>
 
     <footer class="footer-info">
-      <p class="copyright">© {{ currentYear }} 黄金成本价计算器</p>
+      <p class="copyright">{{ copyright }}</p>
       <p class="risk-tip">温馨提示：投资有风险，入市需谨慎.</p>
     </footer>
   </div>
@@ -89,8 +89,9 @@
 <script setup lang="ts">
   import { sleep } from '@daysnap/utils'
   import { useAsyncTask } from '@daysnap/vue-use'
+  import confetti from 'canvas-confetti'
 
-  import { sounds } from '@/utils'
+  import { costPriceStorage, sounds } from '@/utils'
 
   import NumberInput from './components/NumberInput.vue'
 
@@ -103,7 +104,8 @@
   const STORAGE_KEY = 'gold-calculator-form-v1'
   const STORAGE_TIME_KEY = 'gold-calculator-form-time-v1'
   const savedAtText = ref('')
-  const currentYear = new Date().getFullYear()
+
+  const copyright = `© ${new Date().getFullYear()} ${location.hostname}`
 
   const round = (value: number, precision = 2) => {
     const scale = 10 ** precision
@@ -159,18 +161,25 @@
       localStorage.setItem(STORAGE_TIME_KEY, time)
       savedAtText.value = formatSaveTime(time)
       sounds.success()
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+      })
       showSuccessToast(`保存成功`)
     } catch {
       sounds.error()
     }
   })
 
-  const handleReset = () => {
-    sounds.click()
+  const handleReset = async () => {
+    sounds.pop()
+    await showConfirmDialog({ message: '确认重置吗？' }).finally(() => sounds.click())
     form.price = 0
     form.buyWeight = 0
     form.currentAvgPrice = 0
     form.currentWeight = 0
+    showSuccessToast(`重置成功`)
   }
 
   onMounted(() => {
