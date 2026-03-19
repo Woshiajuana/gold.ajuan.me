@@ -29,40 +29,59 @@
     <section class="panel">
       <div class="field-item">
         <div class="field-label">当前金价</div>
-        <NumberInput v-model="form.price" :min="0" :step="0.01" :precision="2" />
+        <NumberInput v-model="form.price" :min="0" :step="1" :precision="2" :max="99999" />
         <div class="field-unit">元/克</div>
       </div>
 
       <div class="field-item">
         <div class="field-label">准备加仓</div>
-        <NumberInput v-model="form.buyWeight" :min="0" :step="0.1" :precision="2" />
+        <NumberInput
+          v-model="form.buyWeight"
+          :min="0"
+          :step="0.1"
+          :precision="2"
+          :max="999999999"
+        />
         <div class="field-unit">克</div>
       </div>
 
       <div class="field-item">
         <div class="field-label">当前持仓均价</div>
-        <NumberInput v-model="form.currentAvgPrice" :min="0" :step="0.01" :precision="2" />
+        <NumberInput
+          v-model="form.currentAvgPrice"
+          :min="0"
+          :step="1"
+          :precision="2"
+          :max="99999"
+        />
         <div class="field-unit">元/克</div>
       </div>
 
       <div class="field-item">
         <div class="field-label">当前持仓克重</div>
-        <NumberInput v-model="form.currentWeight" :min="0" :step="0.1" :precision="2" />
+        <NumberInput
+          v-model="form.currentWeight"
+          :min="0"
+          :step="0.1"
+          :precision="2"
+          :max="999999999"
+        />
         <div class="field-unit">克</div>
       </div>
     </section>
 
     <section class="action-bar">
+      <p class="local-tip">数据仅保存在你手机本地，不会上传到服务器。</p>
       <VanButton class="save-btn" type="primary" block :loading="loading" @click="handleSave">
         保存当前参数
       </VanButton>
       <VanButton class="reset-btn" @click="handleReset">重置</VanButton>
-      <div class="save-time" v-if="savedAtText">上次保存：{{ savedAtText }}</div>
+      <p class="save-time" v-if="savedAtText">上次保存：{{ savedAtText }}</p>
     </section>
 
     <footer class="footer-info">
-      <div class="copyright">© {{ currentYear }} 黄金成本价计算器</div>
-      <div class="risk-tip">温馨提示：投资有风险，入市需谨慎.</div>
+      <p class="copyright">© {{ currentYear }} 黄金成本价计算器</p>
+      <p class="risk-tip">温馨提示：投资有风险，入市需谨慎.</p>
     </footer>
   </div>
 </template>
@@ -300,7 +319,10 @@
   }
 
   .action-bar {
+    display: flex;
+    flex-direction: column;
     text-align: center;
+    gap: 10px;
   }
 
   .save-btn {
@@ -311,7 +333,6 @@
   }
 
   .reset-btn {
-    margin-top: 10px;
     height: auto;
     border: none;
     background: transparent;
@@ -323,7 +344,12 @@
   }
 
   .save-time {
-    margin-top: 10px;
+    text-align: center;
+    font-size: 11px;
+    color: #9ca3af;
+  }
+
+  .local-tip {
     text-align: center;
     font-size: 11px;
     color: #9ca3af;
